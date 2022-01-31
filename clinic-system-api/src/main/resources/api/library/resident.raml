@@ -1,0 +1,195 @@
+#%RAML 1.0 Library
+
+types:
+  create:
+    type: object
+    properties:
+      title: 
+       type: string
+       example: "mr"
+      firstname:
+        type: string
+        example: "john"
+      middlename?:
+        type: string|nil
+        example: "wright"
+      lastname:
+        type: string 
+        example: "martin"
+      age?:
+       type: string
+       example: "25"
+      home:
+        type: string
+        example: "cshome"
+      gender:
+        type: string
+        example: "male"
+      dateOfBirth:
+        type: date-only
+        example: 2022-05-12
+      maritalStatus?:
+        type: string | nil
+        example: "unmarried"
+      NHSNumber?: 
+        type: string | nil
+        example: "2392002"
+      placeOfBirth?:
+        type: string|nil
+        example: "newyork"
+      religion?:
+        type: string|nil
+        example: "christian"
+      nationality?: 
+        type: string|nil
+        example: "american"
+      ethnicOrigin?: 
+        type: string|nil
+        example: "latina"
+      NINumber?: 
+        type: string|nil
+        example: "29920"
+      notes?: 
+        type: string|nil
+        example: "john is counting"
+      admissionDate:
+        type: date-only
+        example: 2022-05-20
+      time: 
+        type: time-only
+        example: 12:30:00
+      roomBed?:
+        type: string|nil
+        example: "204"
+      height?: 
+        type: string|nil
+        example: "6.4"
+      missingBodyMass?:
+        type: string|nil
+        example: "78kg"
+      careGroup?: 
+        type: string|nil
+        example: "member"
+      residentType?: 
+        type: string|nil
+        example: "tenant"
+      residentStatus?:
+        type: string|nil
+        example: "active"
+      medicalNotes?: 
+        type: string|nil
+        example: "positive"
+      extraInformation?: 
+        type: string|nil
+        example: "gradute"
+      residentPhoto?: 
+        type: string|nil
+        example: "attached"
+      residentBannerColour?:
+        type: string | nil
+        example: "#32a852"      
+      contactDetails?: 
+           type: !include ../dataTypes/contactCreate.raml 
+      statusFlag?:
+           type: !include ../dataTypes/statusFlag.raml
+      aisIssue?:
+           type: !include  ../dataTypes/aisFlag.raml
+
+  update:
+    type: object
+    properties:
+      title: 
+       type: string
+       example: "mr"
+      firstname:
+        type: string
+        example: "john"
+      middlename?:
+        type: string|nil
+        example: "wright"
+      lastname:
+        type: string 
+        example: "martin"
+      home:
+        type: string
+        example: "cshome"
+      gender:
+        type: string
+        example: "male"
+      dateOfBirth:
+        type: date-only
+        example: 2022-05-12
+      maritalStatus?:
+        type: string | nil
+        example: "unmarried"
+      NHSNumber?: 
+        type: string | nil
+        example: "2392002"
+      placeOfBirth?:
+        type: string|nil
+        example: "newyork"
+      religion?:
+        type: string|nil
+        example: "christian"
+      nationality?: 
+        type: string|nil
+        example: "american"
+      ethnicOrigin?: 
+        type: string|nil
+        example: "latina"
+      NINumber?: 
+        type: string|nil
+        example: "29920"
+      notes?: 
+        type: string|nil
+        example: "john is counting"
+      admissionDate:
+        type: date-only
+        example: 2022-05-20
+      time: 
+        type: time-only
+        example: 12:30:00
+      roomBed?:
+        type: string|nil
+        example: "204"
+      height?: 
+        type: string|nil
+        example: "6.4"
+      missingBodyMass?:
+        type: string|nil
+        example: "78kg"
+      careGroup?: 
+        type: string|nil
+        example: "member"
+      residentType?: 
+        type: string|nil
+        example: "tenant"
+      residentStatus?:
+        type: string|nil
+        example: "active"
+      medicalNotes?: 
+        type: string|nil
+        example: "positive"
+      extraInformation?: 
+        type: string|nil
+        example: "gradute"
+      residentPhoto?: 
+        type: string|nil
+        example: "attached"
+      residentBannerColour?:
+        type: string | nil
+        example: "#32a852"  
+      residentId:
+         type: number
+         example: 13456 
+      contactDetails?: 
+           type: !include ../dataTypes/contactUpdate.raml 
+      statusFlag?:
+           type: !include ../dataTypes/statusFlag.raml
+      aisIssue?:
+           type: !include  ../dataTypes/aisFlag.raml
+      isActive?: 
+        type: boolean
+
+
+

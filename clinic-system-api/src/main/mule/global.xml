@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:spring="http://www.mulesoft.org/schema/mule/spring"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/jdbc
+	http://www.springframework.org/schema/jdbc/spring-jdbc-4.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-4.2.xsd ">
+	<db:config name="Database_Config" doc:name="Database Config"
+		doc:id="30f6cb88-c46f-46fd-b8ec-6f603c85e662">
+		<db:my-sql-connection host="${db.host}"
+			port="${db.port}" user="${db.username}" password="${db.password}"
+			database="${db.database}">
+			<reconnection >
+				<reconnect frequency="20000" />
+			</reconnection>
+			<db:connection-properties>
+				<db:connection-property key="useSSL"
+					value="false" />
+			</db:connection-properties>
+		</db:my-sql-connection>
+	</db:config>
+	<http:listener-config
+		name="clinic-system-api-httpListenerConfig">
+		<http:listener-connection host="0.0.0.0"
+			port="8081" />
+		<http:listener-interceptors >
+			<http:cors-interceptor >
+				<http:origins >
+					<http:public-resource />
+				</http:origins>
+			</http:cors-interceptor>
+		</http:listener-interceptors>
+	
+</http:listener-config>
+	<apikit:config name="clinic-system-api-config"
+		api="clinic-system-api.raml" outboundHeadersMapName="outboundHeaders"
+		httpStatusVarName="httpStatus" />
+	<configuration-properties
+		doc:name="Configuration properties"
+		doc:id="4d205a01-93dd-4771-8fce-7dae910d16a5"
+		file="properties/${mule_env}.yaml" />
+	<global-property doc:name="Global Property"
+		doc:id="c0b89b08-8f1c-47d7-9f93-eb39d338f88b" name="mule_env"
+		value="dev" />
+	<spring:config name="springConfig"
+		files="spring-beans.xml" />
+
+	<spring:security-manager
+		doc:name="Spring Security manager"
+		doc:id="392af409-4f5b-45c0-b666-c5a48a8106c1">
+
+		<spring:delegate-security-provider
+			name="mule-provider" delegate-ref="authenticationManager" />
+
+	</spring:security-manager>
+
+</mule>

@@ -1,0 +1,266 @@
+#%RAML 1.0 Library
+
+types:
+  create:
+    type: object
+    properties:
+      title: 
+       type: string
+       example: "mr"
+      emailId:
+         type: string
+         example: "yodd@gmail.com"
+      firstName:
+        type: string
+        example: "john"
+      middleName?:
+        type: string|nil
+        example: "wright"
+      lastName:
+        type: string
+        example: "johnsson"
+      home:
+        type: string
+        example: "cshome"
+      gender:
+        type: string
+        example: "male"
+      dateOfBirth:
+         type: date-only
+         example: 2021-09-12
+      age:
+        type: string
+        example: "25"
+      accountsRef?:
+        type: string |nil
+        example: "233453466"
+      maritalStatus?:
+        type: string|nil
+        example: "unmarried"
+      religion?:
+        type: string|nil
+        example: "christian"
+      nationality?:
+        type: string|nil
+        example: "american"
+      ethnicOrigin?:
+        type: string|nil
+        example: "latina"
+      notes?:
+        type: string|nil
+        example: "john notes"
+      department?:
+        type: string|nil
+        example: "report department"
+      status?:
+        type: string|nil
+        example: "active"
+      jobTitle?:
+        type: string|nil
+        example: "associate"
+      rotaCategory?:
+        type: string|nil
+        example: "shift"
+      supervisor?:
+        type: string|nil
+        example: "david"
+      keyWorker?:
+        type: string|nil
+        example: "john"
+      displayOnRota?:
+        type: string|nil
+        example: "available"
+      niNumber?:
+        type: string |nil
+        example: "353456"
+      nhsNumber?:
+        type: string |nil
+        example: "353456"
+      dbsNumber?:
+        type: string |nil
+        example: "44545"
+      dbsDate?:
+        type: date-only|nil
+        example: 2022-02-12
+      crbCleared?:
+        type: boolean|nil
+        example: true
+      crbRiskassessed?:
+        type: boolean|nil
+        example: true
+      startDate?: 
+         type: date-only|nil
+         example: 2021-09-12
+      leaveDate?:
+         type: date-only|nil
+         example: 2022-01-15
+      archiveEmployee?:
+        type: boolean|nil
+        example: true
+      extraInformation?:
+        type: string|nil
+        example: "addormodify"
+      employeephoto?:
+        type: string|nil
+        example: "jpeg"
+      employeebannercolour?:
+        type: string|nil
+        example: "red"
+      contactDetails?:
+        type: !include ../dataTypes/contactCreate.raml 
+      statusFlag?:
+           type: !include ../dataTypes/statusFlag.raml  
+               
+         
+
+
+  update:
+    type: object
+    properties:
+      title: 
+       type: string
+       example: "mr"
+      emailId:
+         type: string
+         example: "yodd@gmail.com"
+      firstName:
+        type: string
+        example: "john"
+      middleName?:
+        type: string|nil
+        example: "wright"
+      lastName:
+        type: string
+        example: "johnsson"
+      home:
+        type: string
+        example: "cshome"
+      gender:
+        type: string
+        example: "male"
+      dateOfBirth:
+         type: string
+         example: "12.08.1995"
+      age:
+        type: string|nil
+        example: "25"
+      accountsRef?:
+        type: string|nil
+        example: "233453466"
+      maritalStatus?:
+        type: string|nil
+        example: "unmarried"
+      religion?:
+        type: string|nil
+        example: "christian"
+      nationality?:
+        type: string|nil
+        example: "american"
+      ethnicOrigin?:
+        type: string|nil
+        example: "latina"
+      notes?:
+        type: string|nil
+        example: "john notes"
+      department?:
+        type: string|nil
+        example: "report department"
+      status?:
+        type: string|nil
+        example: "active"
+      jobTitle?:
+        type: string|nil
+        example: "associate"
+      rotaCategory?:
+        type: string|nil
+        example: "shift"
+      supervisor?:
+        type: string|nil
+        example: "david"
+      keyWorker?:
+        type: string|nil
+        example: "john"
+      displayOnRota?:
+        type: string|nil
+        example: "available"
+      niNumber?:
+        type: string |nil
+        example: "353456"
+      nhsNumber?:
+        type: string |nil
+        example: "353456"
+      dbsNumber?:
+        type: string|nil
+        example: "44545"
+      dbsDate?:
+        type: date-only
+        example: 2022-02-12
+      crbCleared?:
+        type: boolean|nil
+        example: true
+      crbRiskassessed?:
+        type: boolean|nil
+        example: true
+      startDate?: 
+         type: date-only
+         example: 2021-09-12
+      leaveDate?:
+         type: date-only
+         example: 2022-01-15
+      archiveEmployee?:
+        type: boolean|nil
+        example: true
+      extraInformation?:
+        type: string|nil
+        example: "addormodify"
+      employeephoto?:
+        type: string|nil
+        example: "jpeg"
+      employeebannercolour?:
+        type: string|nil
+        example: "red"
+      contactDetails?:
+        type: !include ../dataTypes/contactUpdate.raml 
+      statusFlag?:
+           type: !include ../dataTypes/statusFlag.raml  
+      employeeId:
+        type: number
+        example: 12344
+          
+
+      
+           
+           
+
+          
+          
+
+          
+            
+          
+          
+          
+          
+          
+          
+           
+          
+          
+          
+          
+      
+          
+          
+      
+          
+          
+
+          
+      
+           
+      
+          
+          
+
+          
+

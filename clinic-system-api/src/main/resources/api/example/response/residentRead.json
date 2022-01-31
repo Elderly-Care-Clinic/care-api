@@ -1,0 +1,60 @@
+[{
+  "title": "mr",
+  "firstname": "john",
+  "middlename": "wright",
+  "lastname": "martin",
+  "home": "cshome",
+  "gender": "male",
+  "dateOfBirth": "2022-05-12",
+  "maritalStatus": "unmarried",
+  "NHSNumber": "2392002",
+  "placeOfBirth": "newyork",
+  "religion": "christian",
+  "nationality": "american",
+  "ethnicOrigin": "latina",
+  "NINumber": "29920",
+  "notes": "john is counting",
+  "admissionDate": "2022-05-20",
+  "time": "12:30:00",
+  "roomBed": "204",
+  "height": "6.4",
+  "missingBodyMass": "78kg",
+  "careGroup": "member",
+  "residentType": "tenant",
+  "residentStatus": "active",
+  "medicalNotes": "positive",
+  "extraInformation": "gradute",
+  "residentPhoto": "attached",
+  "residentBannerColour": "#32a852",
+  "contactDetails": [
+    {
+      "title": "MR",
+      "firstName": "john",
+      "lastName": "wright",
+      "relationship": "brother",
+      "address": "mountain View",
+      "postCode": "200001",
+      "telePhone1": "1-800-419-0157",
+      "telePhone2": " 1-800-419-0132",
+      "mobile": "650-253-0000",
+      "fax": "555-123-4567",
+      "emailPersonal": "john12@gmail.com",
+      "emailWork": "mailjohn55@gmail.com",
+      "notes": "john is reading book",
+      "private": true,
+      "contactType": "brother"
+    }
+  ],
+  "statusFlag": [
+    {
+      "colour": "#32a852",
+      "description": "food issue"
+    }
+  ],
+  "aisIssue": [
+    {
+      "icon": "#32a852",
+      "description": "Hearing issue"
+    }
+  ]
+}]

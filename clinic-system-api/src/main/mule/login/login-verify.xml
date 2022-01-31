@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule  xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="login-verify-sub-flow" doc:id="767ad4ba-83bd-46f6-bb8c-1093257fa234" >
+		<set-variable value="#[payload]" doc:name="Store Input" doc:id="247d6133-b157-4224-83d2-5cfd6d815044" variableName="inputPayload"/>
+		<db:select doc:name="Fetch User Details" doc:id="f367a9e3-089c-4aba-9b47-a45a7f8d56c5" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from login where username= :username]]></db:sql>
+			<db:input-parameters ><![CDATA[#[username: payload.username]]]></db:input-parameters>
+		</db:select>
+		<set-payload value='#[output application/json&#10;---&#10;if (isEmpty(payload))&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "failed",&#10;  &#10;  "detailMessage": "User Not Found"&#10;}&#10;else if ( (upper(payload.username[0]) == upper(vars.inputPayload.username))&#10;and ((payload.password[0]) == (vars.inputPayload.password) and &#10;	&#10;(upper(payload.selectHouse[0]) == upper(vars.inputPayload.selectHouse))	&#10;)&#10;)&#10;{&#10;   "id": correlationId,&#10;   "dateTime": now(),&#10;   "scope": payload.scope[0],&#10;  "status" : "verified successfully",&#10;  "username": vars.inputPayload.username&#10;}&#10;&#10;else &#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "failed",&#10;  "detailMessage": "Not Valid"&#10;}]' doc:name="Set Response" doc:id="3173608d-540b-4eca-b5ab-b49815622e2a" />
+		<set-variable value='#[if (payload.status == "verified successfully")&#10;200&#10;else if (payload.detailMessage == "User Not Found")&#10;404&#10;else 400]' doc:name="Set Http Status Code" doc:id="5cf88590-d2cd-401b-b421-6fba26ceee57" variableName="httpStatus"/>
+	<!-- 	<remove-variable doc:name="Remove inputPayload Variable" doc:id="e567e296-7128-488b-b51d-9a9bcedd4bfe" variableName="inputPayload"/>
+ -->	</sub-flow>
+</mule>

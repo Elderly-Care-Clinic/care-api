@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd">
+    <flow name="clinic-system-api-main">
+        <http:listener config-ref="clinic-system-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <http:basic-security-filter doc:name="Basic security filter" realm="mule" />
+        <spring:authorization-filter doc:name="Authorization filter" doc:id="61a7cdfc-9100-4a2c-9867-9126d14c5eed" requiredAuthorities="ROLE_ADMIN" />
+        <apikit:router config-ref="clinic-system-api-config" />
+        <error-handler ref="error-handlerError_Handler" />
+    </flow>
+    <flow name="clinic-system-api-console">
+        <http:listener config-ref="clinic-system-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="clinic-system-api-config" />
+        <error-handler ref="error-handlerError_Handler" />
+    </flow>
+    <flow name="post:\login:application\json:clinic-system-api-config">
+        <flow-ref doc:name="login verify" doc:id="d71279f4-7bc1-4331-96f7-f7a15d44af73" name="login-verify-sub-flow" />
+    </flow>
+    <flow name="put:\resident:application\json:clinic-system-api-config">
+		<flow-ref doc:name="Resident Update" doc:id="9ca8a7c5-a9e9-4d78-a284-d30f457b1be3" name="resident-update-sub-flow"/>
+    </flow>
+       <flow name="put:\employee:application\json:clinic-system-api-config">
+		<flow-ref doc:name="employee" doc:id="89d62d09-a4ee-4a0d-bb87-8a7a5d388106" name="employee-update-sub-flow"/>
+    </flow>
+    <flow name="delete:\resident\(residentId):clinic-system-api-config">
+		<flow-ref doc:name="Delete Resident" doc:id="1d2ff0a2-d454-415c-a143-b1e464e75364" name="employee-deleteSub_Flow"/>
+    </flow>
+    <flow name="get:\resident:clinic-system-api-config">
+		<flow-ref doc:name="resident-readFullSub_Flow" doc:id="01f0509e-6453-44b6-b9be-dce961007485" name="resident-readFullSub_Flow"/>
+    </flow>
+    <flow name="get:\resident\(residentId):clinic-system-api-config">
+		<flow-ref doc:name="Read User" doc:id="cb65216e-39ae-470d-8c36-06e132226531" name="resident-singlereadSub_Flow"/>
+    </flow>
+    <flow name="post:\resident:application\json:clinic-system-api-config">
+		<flow-ref doc:name="resident-create-sub-flow" doc:id="9e992868-3dc9-488c-ba4b-fefccd578efb" name="resident-create-sub-flow"/>
+    </flow>
+      <flow name="post:\employee:application\json:clinic-system-api-config">
+		<flow-ref doc:name="employee-create-sub-flow" doc:id="1ea0dbe9-454c-4728-a650-8eced6c64448" name="employee-create-sub-flow"/>
+    </flow>
+        <flow name="delete:\employee\(employeeId):clinic-system-api-config">
+		<flow-ref doc:name="Delete employee" doc:id="5d0a84c5-e8bc-4b81-93ed-e9abbcc9ca75" name="employee-deleteSub_Flow"/>
+    </flow>
+    
+        <flow name="get:\employee:clinic-system-api-config">
+		<flow-ref doc:name="employee-readFullSub_Flow" doc:id="6daec7de-e2b6-4782-bd1e-7c4cac0b7fec" name="employee-readFullSub_Flow"/>
+    </flow>
+    <flow name="get:\employee\(employeeId):clinic-system-api-config">
+		<flow-ref doc:name="Read User" doc:id="bca8b68f-0987-44ac-9ff2-8baea5c0de52" name="employee-singlereadSub_Flow"/>
+    </flow>
+</mule>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="error-handlerError_Handler" doc:id="e96b6cf5-6b2b-49be-84eb-4e904e1cddc0" >
+	  <on-error-continue type="APIKIT:BAD_REQUEST">
+				<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Bad request",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Error Response" doc:id="237a92ae-5af8-4e7f-af4b-0979d3b730b9" />
+				<set-variable value="400" doc:name="Set Http Statuss" doc:id="0c85eebb-94f0-4109-8026-269e30ad6253" variableName="httpStatus"/>
+            </on-error-continue>
+            <on-error-continue type="APIKIT:NOT_FOUND">
+				<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Resource not found",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Set Error Response" doc:id="1d192283-91f2-4364-b520-7e1a3b274da2" />
+				<set-variable value="404" doc:name="Set HttpStatus" doc:id="3e711ad2-16eb-4154-ba02-7fda61b56ac8" variableName="httpStatus" />
+            </on-error-continue>
+            <on-error-continue type="APIKIT:METHOD_NOT_ALLOWED">
+				<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Method not allowed",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Set Error Response" doc:id="3e33e263-3820-4713-9788-fcd0488420ed" />
+				<set-variable value="405" doc:name="Set HttpStatus" doc:id="9bf9be8c-4b2c-4bab-9325-608104ac9bd3" variableName="httpStatus"/>
+            </on-error-continue>
+            <on-error-continue type="APIKIT:NOT_ACCEPTABLE">
+				<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Not acceptable",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Set Payload" doc:id="4128f382-c87e-45d0-9149-55995bfa9c92" />
+				<set-variable value="406" doc:name="Set httpStatus" doc:id="df755b25-1b4a-4f8c-85b3-1d2888beb115" variableName="httpStatus"/>
+            </on-error-continue>
+            <on-error-continue type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+				<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Unsupported media type",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Set Payload" doc:id="ff72b029-c832-4968-9182-9204d01d0605" />
+				<set-variable value="415" doc:name="Set httpStatus" doc:id="a47d11a6-998b-4db7-8a46-b516db24a62e" variableName="httpStatus"/>
+            </on-error-continue>
+            <on-error-continue type="APIKIT:NOT_IMPLEMENTED">
+				<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Not Implemented",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Set Payload" doc:id="9004c793-21aa-4e27-b05c-86896aa62122" />
+				<set-variable value="501" doc:name="Set httpStatus" doc:id="d165787b-3be8-4829-a08b-decc623954ea" variableName="httpStatus"/>
+            </on-error-continue>
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="93072571-2949-40e7-86b0-28b66eaddf2f" type="ANY">
+			<set-payload value='#[output application/json&#10;&#10;---&#10;{&#10;  "id": correlationId,&#10;   "dateTime": now(),&#10;  "status" : "Generic Error",&#10;  "detailMessage": error.detailedDescription&#10;}]' doc:name="Set Payload" doc:id="a2867399-63e9-40d5-990c-d3cee7eaf90b" />
+			<set-variable value="500" doc:name="Set httpStatus" doc:id="7531c8ee-1094-45c9-a295-082b170565d0" variableName="httpStatus"/>
+		</on-error-continue>
+	</error-handler>
+</mule>

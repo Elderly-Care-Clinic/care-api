@@ -1,0 +1,36 @@
+%dw 2.0
+
+type auto_f1613877_04ab_4395_8fde_0db8e65da1fb_Input_Payload = {
+  firstname: String, 
+  notes?: String | Null, 
+  gender: String, 
+  ethnicOrigin?: String | Null, 
+  medicalNotes?: String | Null, 
+  title: String, 
+  NHSNumber?: String | Null, 
+  residentPhoto?: String | Null, 
+  roomBed?: String | Null, 
+  residentType?: String | Null, 
+  height?: String | Null, 
+  placeOfBirth?: String | Null, 
+  admissionDate: String, 
+  NINumber?: String | Null, 
+  residentStatus?: String | Null, 
+  careGroup?: String | Null, 
+  middlename?: String | Null, 
+  residentBannerColour?: String | Null, 
+  dateOfBirth: String, 
+  contactDetails?: Array<{    lastName: String | Null,     telePhone1?: String | Null,     telePhone2?: String | Null,     "private"?: Boolean | Null,     address?: String | Null,     emailPersonal?: String | Null,     notes?: String | Null,     mobile?: String | Null,     emailWork?: String | Null,     contactType?: String | Null,     title?: String | Null,     firstName: String | Null,     postCode?: String | Null,     relationship?: String | Null,     fax?: String | Null,     _?: Any  }>, 
+  lastname: String, 
+  home: String, 
+  religion?: String | Null, 
+  extraInformation?: String | Null, 
+  nationality?: String | Null, 
+  aisIssue?: Array<{    icon?: String | Null,     description?: String,     _?: Any  }>, 
+  missingBodyMass?: String | Null, 
+  time: String, 
+  maritalStatus?: String | Null, 
+  statusFlag?: Array<{    colour?: String | Null,     description?: String,     _?: Any  }>, 
+  _?: Any
+}
+

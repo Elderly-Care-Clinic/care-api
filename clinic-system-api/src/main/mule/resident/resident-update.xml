@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="resident-update-sub-flow" doc:id="f1613877-04ab-4395-8fde-0db8e65da1fb" >
+		<set-variable value='#[output application/json&#10;---&#10;{&#10;	rId: payload.residentId default ""&#10;	&#10;}]' doc:name="Set Id" doc:id="39ef5164-aff5-4109-a22d-04110d3de422" variableName="commonDataId"/>
+		<set-variable value="#[payload]" doc:name="Set InputPayload" doc:id="a6d599e6-01a4-410c-a392-5629d961557a" variableName="inputPayload"/>
+		<db:update doc:name="Resident Update" doc:id="c1372d5d-c9e0-46af-9735-cce4418100ff" config-ref="Database_Config">
+			<db:sql ><![CDATA[ UPDATE residentDetails
+SET	 title=:title, firstname=:firstname, middlename=:middlename, lastname=:lastname, home=:home, gender=:gender, dateOfBirth=:dateOfBirth, maritalStatus=:maritalStatus, NHSNumber=:NHSNumber, placeOfBirth=:placeOfBirth, religion=:religion, nationality=:nationality, ethnicOrigin=:ethnicOrigin, NINumber=:NINumber, notes=:notes, admissionDate=:admissionDate, time=:time, roomBed=:roomBed, height=:height, missingBodyMass=:missingBodyMass, careGroup=:careGroup, residentType=:residentType, residentStatus=:residentStatus, medicalNotes=:medicalNotes, extraInformation=:extraInformation, residentPhoto=:residentPhoto, residentBannerColour=:residentBannerColour   
+ WHERE residentId= :residentId
+	]]></db:sql>
+			<db:input-parameters ><![CDATA[#[output application/java  skipNullOn="everywhere"
+--- 
+  {"title"  :  payload.title,
+      "firstname"  :  payload.firstname,
+      "middlename"  :  payload.middlename,
+      "lastname"    :  payload.lastname,
+      "home"   :  payload.home,
+      "gender"   :  payload.gender,
+      "dateOfBirth"  :  payload.dateOfBirth,
+      "maritalStatus"  :  payload.maritalStatus,
+      "NHSNumber"   :  payload.NHSNumber,
+      "placeOfBirth"  :  payload.placeOfBirth,
+      "religion"  :  payload.religion,
+      "nationality"  :  payload.nationality,
+      "ethnicOrigin"  :  payload.ethnicOrigin,
+      "NINumber"   :  payload.NINumber,
+      "notes"  :  payload.notes,
+      "admissionDate"   :  payload.admissionDate,
+      "time"  :  payload.time,
+      "roomBed"  : payload.roomBed,
+      "height"  :  payload.height,
+      "missingBodyMass"  :  payload.missingBodyMass,
+      "careGroup"  :  payload.careGroup,
+      "residentType"  :  payload.residentType,
+      "residentStatus"  :  payload.residentStatus,
+      "medicalNotes"  :  payload.medicalNotes,
+      "extraInformation"  :  payload.extraInformation,
+      "residentPhoto"  :  payload.residentPhoto,
+      "residentBannerColour"  :  payload.residentBannerColour,
+       "residentId": vars.commonData.rId}]]]></db:input-parameters>
+		</db:update>
+		<set-variable value="#[output application/json&#10;---&#10;{&#10;    contact : if(!isEmpty(vars.inputPayload.contactDetails) and (vars.inputPayload.contactDetails != [{}])  )&#10;      true&#10;      else false,&#10;        statusFlag : if(!isEmpty(vars.inputPayload.statusFlag) and (vars.inputPayload.statusFlag != [{}])  )&#10;      true&#10;      else false,&#10;   aisIssue : if(!isEmpty(vars.inputPayload.aisIssue) and (vars.inputPayload.aisIssue != [{}])  )&#10;      true&#10;      else false,&#10;      rId: payload.residentId[0] default []&#10;}]" doc:name="Set condition" doc:id="91a64f35-13da-44a9-b8bb-94e842c555ad" variableName="commonData"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="e66d061b-3309-4af0-94c6-1fea18ca38b8" >
+			<route >
+				<choice doc:name="Update Contact" doc:id="f0e34ffc-f9f9-4675-a1c6-9a5df94f4d87">
+			<when expression="#[vars.commonData.contact]">
+						<try doc:name="Try" doc:id="36fcba1a-bc96-4ca3-9b71-a934b382a6f5">
+							<db:bulk-update doc:name="Bulk update" doc:id="a698b489-887d-4ae2-ab41-07c061cb9aad" config-ref="Database_Config">
+								<db:bulk-input-parameters><![CDATA[#[output application/java skipNullOn="everywhere"
+---
+vars.inputPayload.contactDetails  default [] map 
+{
+    "title" : $.title ,
+    "firstName" : $.firstName ,
+    "lastName" : $.lastName,
+"relationship" : $.relationship ,
+"address" : $.address ,
+"postalCode" : $.postalCode ,
+"telePhone1" : $.telePhone1 ,
+"telePhone2" : $.telePhone2 ,
+"mobile" : $.mobile ,
+"fax" : $.fax ,
+"emailPersonal" : $.emailPersonal ,
+"emailWork" : $.emailWork ,
+"notes" : $.notes ,
+"private" : $."private" ,
+"contactType" : $.contactType ,
+"residentId" : vars.commonDataId.rId,
+"contactId" : $.contactId
+
+}]]]></db:bulk-input-parameters>
+								<db:sql><![CDATA[update residentContactDetails
+set  title=:title, firstName=:firstName, lastName=:lastName, relationship=:relationship, address=:address, postalCode=:postalCode, telePhone1=:telePhone1, telePhone2=:telePhone2, mobile=:mobile, fax=:fax, emailPersonal=:emailPersonal, emailWork=:emailWork, notes=:notes, private=:private, contactType=:contactType
+where contactId=:contactId and residentId=:residentId]]></db:sql>
+							</db:bulk-update>
+							<error-handler ref="error-handlerError_Handler" />
+						</try>
+					</when>
+		</choice>
+			</route>
+			<route >
+				<choice doc:name="Update Status Flag" doc:id="26e39b94-72a1-423c-9674-3ee08a8df474">
+					<when expression="#[vars.commonData.statusFlag]">
+						<try doc:name="Try" doc:id="532b0cf9-1412-46e8-8410-44f128d6f5cd">
+							<db:update doc:name="Update" doc:id="54c86145-20f9-4af2-af0a-a1c08a4824ba" config-ref="Database_Config">
+								<db:sql ><![CDATA[update  residentStatusFlag
+set data=:data
+where residentId=:residentId]]></db:sql>
+								<db:input-parameters ><![CDATA[#[output application/json skipNullOn="everywhere"
+---
+{data :  
+	 write(vars.inputPayload.statusFlag, "application/json")
+	
+	 default "",
+residentId: vars.commonDataId.rId  
+}]]]></db:input-parameters>
+							</db:update>
+							  <error-handler ref="error-handlerError_Handler" />
+						</try>
+					</when>
+				</choice>
+			</route>
+			<route >
+				<choice doc:name="Update AIS" doc:id="bce7aff2-6aad-4901-8a4a-329e0ec950be">
+					<when expression="#[vars.commonData.aisIssue]">
+						<try doc:name="Try" doc:id="c03dc83c-9803-4336-8ccd-20a151eb07a6">
+							<db:update doc:name="Update" doc:id="7ca298ae-f5e3-4959-a96a-d91889c285f7" config-ref="Database_Config">
+								<db:sql ><![CDATA[update residentAisFlag 
+set data=:data
+where residentId=:residentId]]></db:sql>
+								<db:input-parameters ><![CDATA[#[output application/json skipNullOn="everywhere"
+---
+{data : 
+	write(vars.inputPayload.aisIssue, "application/json")
+	 default '',
+residentId: vars.commonDataId.rId
+}]]]></db:input-parameters>
+							</db:update>
+							 <error-handler ref="error-handlerError_Handler" />
+						</try>
+					</when>
+				</choice>
+			</route>
+		</scatter-gather>
+		<set-payload value='#[output application/json &#10;---&#10;{&#10;   "id": correlationId,&#10;   "dateTime": now(),&#10;   "status" : " Resident Updated Successfully",&#10;   "residentId": vars.commonDataId.rId&#10;    &#10;}]' doc:name="Set Response" doc:id="c374ab75-388d-48a3-ba92-b91873aa5510" />
+	</sub-flow>
+</mule>

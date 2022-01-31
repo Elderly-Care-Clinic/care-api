@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="employee-deleteSub_Flow" doc:id="1b3dbf78-2b36-4fdf-a349-e0ceaf61bef4" >
+		<db:update doc:name="Update Active to inActive" doc:id="0c4d9b7e-8f27-42b8-ada7-efc8fd2f53d9" config-ref="Database_Config">
+			<db:sql ><![CDATA[update  employeeDetails
+set isActive=:isActive
+where employeeId=:employeeId]]></db:sql>
+			<db:input-parameters ><![CDATA[#[output application/json
+---
+{
+	isActive : 0,
+	employeeId: attributes.uriParams.employeeId
+}]]]></db:input-parameters>
+		</db:update>
+		<set-payload value='#[output application/json &#10;---&#10;{&#10;   "id": correlationId,&#10;   "dateTime": now(),&#10;   "status" : " Employee Deleted Successfully",&#10;    &#10;}]' doc:name="Set Payload" doc:id="926b2c38-795f-44be-b6cc-e94a97f7cf02" />
+	</sub-flow>
+</mule>

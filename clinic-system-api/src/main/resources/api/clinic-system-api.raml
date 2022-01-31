@@ -1,0 +1,169 @@
+#%RAML 1.0
+title: clinic-system-api
+description: this api we can use to perform the curd operation of residential , employee and admin of clinic elderly home
+protocols:
+  - HTTP
+  - HTTPS
+baseUri: http://{host}:{port}/api
+
+mediaType: 
+- application/json
+
+uses:
+  verify: library/loginVerify.raml
+  resident: library/resident.raml
+  employee: library/employee.raml
+securitySchemes:
+  basic:
+    description: |
+      This API supports Basic Authentication.
+    type: Basic Authentication
+securedBy:
+  - basic
+
+/login:
+  post:
+   description: Use to verify the login of employee
+   body:
+     application/json:
+       type: verify.login
+   responses:
+     200:
+      body:
+        application/json:
+          example: !include example/response/loginVerify.json
+     400:
+       body:
+         application/json:
+           example: !include example/response/errorResponse.json
+/resident:
+   post:
+     body:
+       application/json:
+         type: resident.create
+     responses:
+       200:
+         body:
+          application/json:
+            example: !include example/response/residentCreate.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   put:
+     body:
+       application/json:
+         type: resident.update
+     responses:
+       200:
+         body:
+          application/json:
+            example: !include example/response/residentUpdate.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   get:
+     queryParameters:
+       firstname? : string
+       lastname? : string
+       selectHouse?: string
+     responses:
+       200:
+         body:
+           application/json:
+             example: !include example/response/residentRead.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   /{residentId}:
+      get:
+        responses:
+     
+         200:
+          body:
+           application/json:
+             example: !include example/response/residentSingleRead.json
+         400:
+          body:
+           application/json:
+             example: !include example/response/errorResponse.json
+      delete:
+        responses:
+         200:
+          body:
+           application/json:
+             example: !include example/response/residentDelete.json
+         400:
+          body:
+           application/json:
+             example: !include example/response/errorResponse.json
+/employee:
+   post:
+     body:
+       application/json:
+         type: employee.create
+     responses:
+       200:
+         body:
+          application/json:
+            example: !include example/response/employeecreate.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   put:
+     body:
+       application/json:
+         type: employee.update
+     responses:
+       200:
+         body:
+          application/json:
+            example: !include example/response/employeeupdate.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   get:
+     queryParameters:
+       firstname? : string
+       lastname? : string
+       selectHouse?: string
+     responses:
+       200:
+         body:
+           application/json:
+             example: !include example/response/employeeread.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   /{employeeId}:
+      get:
+        responses:
+     
+         200:
+          body:
+           application/json:
+             example: !include example/response/employeesingle.json
+         400:
+          body:
+           application/json:
+             example: !include example/response/errorResponse.json
+      delete:
+        responses:
+         200:
+          body:
+           application/json:
+             example: !include example/response/employeedelete.json
+         400:
+          body:
+           application/json:
+             example: !include example/response/errorResponse.json
+
+     
+   
+    
+

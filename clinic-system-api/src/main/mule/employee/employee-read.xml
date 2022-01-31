@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="employee-singlereadSub_Flow" doc:id="f915492f-1dee-42e3-87b0-8159f3c0985f" >
+		<scatter-gather doc:name="Scatter-Gather" doc:id="6d344e4e-6145-4487-95a7-11dd762ff0ae" >
+			<route >
+				<try doc:name="Try" doc:id="49de990c-3f25-4bdd-b089-c4e37a2d70c0" >
+					<db:select doc:name="Select employeeStatusFlag" doc:id="33bcc773-e7a7-41b3-82ec-15b2177db741" config-ref="Database_Config">
+			<db:sql><![CDATA[select * from employeeStatusFlag where employeeId=:employeeId]]></db:sql>
+					<db:input-parameters><![CDATA[#[employeeId: attributes.uriParams.employeeId]]]></db:input-parameters>
+		</db:select>
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e863ef3a-88c8-4874-b053-e9f7a7e60f1e" >
+							<set-payload value="#[output application/json&#10;---&#10;[]]" doc:name="Set Payload" doc:id="77df5bf4-97ec-478b-b901-50bf40250879" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+			</route>
+			<route >
+				<try doc:name="Try" doc:id="130c7546-29aa-43a4-824c-a62a11ea4406" >
+					<db:select doc:name="Select employeeDetails" doc:id="24d71186-b15d-4292-a4e7-0498ced60e44" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from employeeDetails where employeeId=:employeeId and isActive=:isActive]]></db:sql>
+					<db:input-parameters><![CDATA[#[output application/json
+---
+{
+	employeeId: attributes.uriParams.employeeId,
+	isActive: 1
+}]]]></db:input-parameters>
+				</db:select>
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="18a47e5c-a16e-48b3-954d-d392e3e05692" >
+							<set-payload value="#[output application/json&#10;---&#10;[]]" doc:name="Set Payload" doc:id="1d81f619-6b36-4835-8feb-3b198eb8bc76" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+			</route>
+			<route >
+				<try doc:name="Try" doc:id="ec73826a-67fc-46ae-96bf-969e050c0c92" >
+					<db:select doc:name="Select employeeContactDetails" doc:id="766a427c-a4e0-40fd-bc3d-f96124fc15bf" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from employeeContactDetails where employeeId=:employeeId]]></db:sql>
+					<db:input-parameters><![CDATA[#[employeeId: attributes.uriParams.employeeId]]]></db:input-parameters>
+				</db:select>
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="2ce4b5ff-6573-4dc0-8ae4-4444a0cf84cd" >
+							<set-payload value="#[output application/json&#10;---&#10;[]]" doc:name="Set Payload" doc:id="3cef0b7f-c88d-496b-bed6-f3e68da058fa" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+			</route>
+		</scatter-gather>
+		<set-payload value='#[output application/json&#10;import * from dw::util::Values&#10;fun dataRewrite(data) = if (isEmpty(data))&#10;data&#10;else read(data,"application/json")&#10;---&#10;if (!isEmpty(payload."1".payload[0]))&#10;(payload."1".payload[0] default {})&#10;&#10;++     (contactDetails :  payload."2".payload default []) if (!isEmpty(payload."2".payload default []))&#10;&#10;++ (statusFlag : flatten(payload."0".payload.data default [] map dataRewrite($)))&#10;if (!isEmpty(payload."0".payload.data default []))&#10;&#10;else []]' doc:name="Set Payload" doc:id="49df7005-cf9b-49c6-99fe-e50bb59f0816" />
+		<set-variable value="#[if(!isEmpty(payload) and (payload != {}))&#10;200&#10;else 404]" doc:name="Set HttpStatus" doc:id="827bbed1-4306-4047-9c74-ae6b681b871a" variableName="httpStatus"/>
+	</sub-flow>
+	<sub-flow name="employee-readFullSub_Flow" doc:id="2e6d26ef-76a7-4219-b000-e925b58bc828" >
+		<set-variable value="#[output application/json&#10;&#10;&#10;var q= &quot;Select * from employeeDetails&quot;&#10; &#10;var condition= ([{&#10;&#10;   key: &quot;firstname&quot;,&#10;   value:  attributes.queryParams.firstname&#10;&#10;},{&#10;&#10;   key: &quot;lastname&quot;,&#10;   value: attributes.queryParams.lastname&#10;&#10;},&#10;{&#10;&#10;   key: &quot;isActive&quot;,&#10;   value: 1&#10;&#10;},&#10;&#10;{&#10;&#10;   key: &quot;home&quot;,&#10;   value: attributes.queryParams.selectHouse&#10;&#10;}]   filter(!isEmpty($.value ))  map  ($.key ++ &quot; = &quot; ++  &quot;'&quot; ++ $.value ++ &quot;'&quot;))&#10;joinBy &quot; and &quot;&#10;&#10;---&#10;if(!isEmpty(condition))&#10;q++ &quot; where &quot; ++ condition &#10;  else q]" doc:name="Set Query" doc:id="5aad6df4-ee05-4063-8fc7-e3922846bea2" variableName="query"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="323a0c96-9c8e-4bc2-9e4b-e86297aa76ec" >
+			<route >
+				<try doc:name="Try" doc:id="4f424070-b7c5-44b6-90b5-59c8eb25c8ae" >
+					<db:select doc:name="Select" doc:id="7d1a82ae-946c-4ba6-843d-aadeae78f441" config-ref="Database_Config">
+			<db:sql><![CDATA[
+#[vars.query]
+]]></db:sql>
+		</db:select>
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="01e1e084-67f5-4d2c-b8d1-88ea417becbb" >
+							<set-payload value="#[output application/json&#10;---&#10;[]]" doc:name="Set Payload" doc:id="51a25f7a-c7d0-418d-a97d-5f7041ddcf40" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+			</route>
+			<route >
+				<try doc:name="Try" doc:id="e976f964-529d-4ba6-9fcd-feb23a47da22" >
+					<db:select doc:name="Select" doc:id="e31c75f1-1fec-492a-aa30-d759bfe770cf" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from employeeContactDetails
+
+]]></db:sql>
+				</db:select>
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e333dec3-c693-4bdf-acf7-5382bea86c42" >
+							<set-payload value="#[output application/json&#10;---&#10;[]]" doc:name="Set Payload" doc:id="da109721-e11c-49de-8956-c69e0ca22ca7" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+			</route>
+			<route >
+				<try doc:name="Try" doc:id="a9e559a0-eb7c-491f-9839-5c59645b2408" >
+					<db:select doc:name="Select" doc:id="4d1a80a2-9fac-441b-a873-9cd51ff286e2" config-ref="Database_Config">
+					<db:sql><![CDATA[select * from employeeStatusFlag
+
+]]></db:sql>
+				</db:select>
+					<error-handler >
+						<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7d75bb2a-1d44-4883-919f-fda26c7e5107" >
+							<set-payload value="#[output application/json&#10;---&#10;[]]" doc:name="Set Payload" doc:id="aab535bc-9886-4695-bea9-94bfe1e180d1" />
+						</on-error-continue>
+					</error-handler>
+				</try>
+			</route>
+		</scatter-gather>
+		<set-variable value='#[output application/json&#10;fun dataRewrite(data) = if (isEmpty(data))&#10;data&#10;else read(data,"application/json") &#10;---&#10;flatten (payload."2".payload default [] map dataRewrite($.data))]' doc:name="Set Status Flag" doc:id="c641d67f-ecc2-41cd-bf89-15a2ee5064b5" variableName="status"/>
+		<set-payload value='#[output application/json&#10;&#10;fun dataRewrite(data) = if (isEmpty(data))&#10;data&#10;else read(data,"application/json")&#10;fun dataMerge(residentId,inputData) = (inputData) &#10;filter (residentId == $.residentId) &#10;---&#10;payload."0".payload map (($ ++ contactDetails:&#10;dataMerge($.residentId,payload."1".payload default []))&#10;++ (statusFlag:&#10;dataMerge($.residentId,vars.status default [])&#10;)&#10;&#10;)]' doc:name="Set Payload" doc:id="048913f4-b0c7-4723-b741-3af0513ffa37" />
+	</sub-flow>
+</mule>

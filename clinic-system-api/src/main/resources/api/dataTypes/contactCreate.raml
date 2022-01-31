@@ -1,0 +1,50 @@
+#%RAML 1.0 DataType
+    type: array
+    items:
+     type: object
+     properties:
+      title?:
+        type: string | nil
+        example: "MR"
+      firstName:
+          type: string | nil
+          example: "john"
+      lastName:
+        type: string | nil
+        example: "wright"
+      relationship?:
+        type: string | nil
+        example: "brother"
+      address?:
+        type: string | nil
+        example: "mountain View"
+      postalCode?:
+        type: string | nil
+        example: "200001"
+      telePhone1?:
+        type: string | nil
+        example: "1-800-419-0157"
+      telePhone2?:
+        type: string | nil
+        example: " 1-800-419-0132"
+      mobile?:
+        type: string | nil
+        example: "650-253-0000"
+      fax?:
+        type: string | nil
+        example: "555-123-4567"
+      emailPersonal?:
+        type: string | nil
+        example: "john12@gmail.com"
+      emailWork?:
+        type: string | nil
+        example: "mailjohn55@gmail.com"
+      notes?:
+        type: string | nil
+        example: "john is reading book"
+      private?:
+        type: boolean | nil
+        example: true
+      contactType?:
+        type: string | nil
+        example: "brother"

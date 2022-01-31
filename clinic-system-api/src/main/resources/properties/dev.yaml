@@ -1,0 +1,14 @@
+######Database Details
+db:
+ host: "ec2-3-19-246-206.us-east-2.compute.amazonaws.com"
+ port: "3306"
+ password:  "Good@123K"
+ username: "root"
+ database: "clinic_system"
+ 
+ #Http Listener
+http:
+  host: "0.0.0.0"
+  port: "8081"
+  basepath: "/api/*"
+  

@@ -1,0 +1,66 @@
+{
+  "title": "mr",
+  "firstName": "john",
+  "middleName": "wright",
+  "lastName": "johnsson",
+  "home": "cshome",
+  "gender": "male",
+  "dateOfBirth": "12.08.1995",
+  "age": 25,
+  "accountsRef": 233453466,
+  "maritalStatus": "unmarried",
+  "religion": "christian",
+  "nationality": "american",
+  "ethnicOrigin": "latina",
+  "notes": "john notes",
+  "department": "report department",
+  "status": "active",
+  "jobTitle": "associate",
+  "rotaCategory": "shift",
+  "supervisor": "david",
+  "keyWorker": "john",
+  "displayOnRota": "available",
+  "niNumber": 353456,
+  "nhsNumber": 44212,
+  "dbsNumber": 44545,
+  "dbsDate": "2022-02-12",
+  "crbCleared": "yes",
+  "crbRiskassessed": "positive",
+  "startDate": "2021-09-12",
+  "leaveDate": "2022-01-15",
+  "archiveEmployee": "archived",
+  "extraInformation": "addormodify",
+  "employeephoto": "jpeg",
+  "employeebannercolour": "red",
+  "contactDetails": [
+    {
+      "title": "MR",
+      "firstName": "john",
+      "lastName": "wright",
+      "relationship": "brother",
+      "address": "mountain View",
+      "postalCode": "200001",
+      "telePhone1": "1-800-419-0157",
+      "telePhone2": " 1-800-419-0132",
+      "mobile": "650-253-0000",
+      "fax": "555-123-4567",
+      "emailPersonal": "john12@gmail.com",
+      "emailWork": "mailjohn55@gmail.com",
+      "notes": "john is reading book",
+      "private": true,
+      "contactType": "brother"
+    }
+  ],
+  "statusFlag": [
+    {
+      "colour": "#32a852",
+      "description": "food issue"
+    }
+  ],
+  "aisIssue": [
+    {
+      "icon": "#32a852",
+      "description": "Hearing issue"
+    }
+  ]
+}

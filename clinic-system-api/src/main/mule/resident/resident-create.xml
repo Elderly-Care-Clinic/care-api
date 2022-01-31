@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<sub-flow name="resident-create-sub-flow" doc:id="f1613877-04ab-4395-8fde-0db8e65da1fb" >
+		<set-variable value="#[uuid()]" doc:name="Set Id" doc:id="39ef5164-aff5-4109-a22d-04110d3de422" variableName="uniqueId"/>
+		<set-variable value="#[payload]" doc:name="Set InputPayload" doc:id="a6d599e6-01a4-410c-a392-5629d961557a" variableName="inputPayload"/>
+		<db:insert doc:name="resident create" doc:id="9de53750-f93c-4af7-a449-e5277ae95e95" config-ref="Database_Config">
+			<db:sql ><![CDATA[ insert into residentDetails
+ ( title,firstname,middlename,lastname,home,
+      gender,dateOfBirth,maritalStatus,NHSNumber,placeOfBirth,
+      religion,nationality,ethnicOrigin,NINumber,notes,admissionDate,
+      time,roomBed,height,missingBodyMass,careGroup,residentType,
+      residentStatus,medicalNotes,extraInformation,residentPhoto,
+      residentBannerColour,uuid,age
+      ) values 
+	  (:title, :firstname, :middlename, :lastname, :home, :gender, :dateOfBirth, :maritalStatus, :NHSNumber, :placeOfBirth, :religion, :nationality, :ethnicOrigin, :NINumber, :notes, :admissionDate, :time, :roomBed, :height, :missingBodyMass, :careGroup, :residentType, :residentStatus, :medicalNotes, :extraInformation, :residentPhoto, :residentBannerColour,
+      :uuid,:age
+	  ) ]]></db:sql>
+			<db:input-parameters ><![CDATA[#[output application/json  skipNullOn="everywhere"
+--- 
+  {"title"  :  payload.title,
+      "firstname"  :  payload.firstname,
+      "middlename"  :  payload.middlename,
+      "lastname"    :  payload.lastname,
+      "home"   :  payload.home,
+      "gender"   :  payload.gender,
+      "dateOfBirth"  :  payload.dateOfBirth,
+      "maritalStatus"  :  payload.maritalStatus,
+      "NHSNumber"   :  payload.NHSNumber,
+      "placeOfBirth"  :  payload.placeOfBirth,
+      "religion"  :  payload.religion,
+      "nationality"  :  payload.nationality,
+      "ethnicOrigin"  :  payload.ethnicOrigin,
+      "NINumber"   :  payload.NINumber,
+      "notes"  :  payload.notes,
+      "admissionDate"   :  payload.admissionDate,
+      "time"  :  payload.time,
+      "roomBed"  : payload.roomBed,
+      "height"  :  payload.height,
+      "missingBodyMass"  :  payload.missingBodyMass,
+      "careGroup"  :  payload.careGroup,
+      "residentType"  :  payload.residentType,
+      "residentStatus"  :  payload.residentStatus,
+      "medicalNotes"  :  payload.medicalNotes,
+      "extraInformation"  :  payload.extraInformation,
+      "residentPhoto"  :  payload.residentPhoto,
+      "residentBannerColour"  :  payload.residentBannerColour,
+      uuid: vars.uniqueId,
+      age: payload.age
+	}]]]></db:input-parameters>
+		</db:insert>
+		<db:select doc:name="Get Id" doc:id="f5773407-d0d7-4957-bc51-1adff929ef71" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT residentId from residentDetails where uuid= :uuid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[uuid:  vars.uniqueId]]]></db:input-parameters>
+		</db:select>
+		<set-variable value="#[output application/json&#10;---&#10;{&#10;    contact : if(!isEmpty(vars.inputPayload.contactDetails) and (vars.inputPayload.contactDetails != [{}])  )&#10;      true&#10;      else false,&#10;        statusFlag : if(!isEmpty(vars.inputPayload.statusFlag) and (vars.inputPayload.statusFlag != [{}])  )&#10;      true&#10;      else false,&#10;   aisIssue : if(!isEmpty(vars.inputPayload.aisIssue) and (vars.inputPayload.aisIssue != [{}])  )&#10;      true&#10;      else false,&#10;      rId: payload.residentId[0] default []&#10;}]" doc:name="Set condition" doc:id="91a64f35-13da-44a9-b8bb-94e842c555ad" variableName="commonData"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="e66d061b-3309-4af0-94c6-1fea18ca38b8" >
+			<route >
+				<choice doc:name="Create Contact" doc:id="f0e34ffc-f9f9-4675-a1c6-9a5df94f4d87">
+			<when expression="#[vars.commonData.contact]">
+						<try doc:name="Try" doc:id="36fcba1a-bc96-4ca3-9b71-a934b382a6f5">
+							<db:bulk-insert doc:name="Bulk insert" doc:id="943c4863-bea4-4ae8-9e40-35a4236221ef" config-ref="Database_Config">
+							<db:bulk-input-parameters><![CDATA[#[output application/java skipNullOn="everywhere"
+---
+vars.inputPayload.contactDetails  default [] map 
+{
+    "title" : $.title ,
+    "firstName" : $.firstName ,
+    "lastName" : $.lastName,
+"relationship" : $.relationship ,
+"address" : $.address ,
+"postalCode" : $.postalCode ,
+"telePhone1" : $.telePhone1 ,
+"telePhone2" : $.telePhone2 ,
+"mobile" : $.mobile ,
+"fax" : $.fax ,
+"emailPersonal" : $.emailPersonal ,
+"emailWork" : $.emailWork ,
+"notes" : $.notes ,
+"private" : $."private" ,
+"contactType" : $.contactType ,
+"residentId" : vars.commonData.rId
+
+}]]]></db:bulk-input-parameters>
+							<db:sql><![CDATA[insert into residentContactDetails
+(title,firstName,lastName,relationship,address,postalCode,
+telePhone1,telePhone2,mobile,fax,emailPersonal,emailWork,notes,private,
+contactType,residentId
+)
+
+values 
+(:title, :firstName, :lastName, :relationship, :address, :postalCode, :telePhone1, :telePhone2, :mobile, :fax, :emailPersonal, :emailWork, :notes, :private, :contactType, :residentId
+)]]></db:sql>
+						</db:bulk-insert>
+						 <error-handler ref="error-handlerError_Handler" />
+						
+						</try>
+					</when>
+		</choice>
+			</route>
+			<route >
+				<choice doc:name="Create Status Flag" doc:id="26e39b94-72a1-423c-9674-3ee08a8df474">
+					<when expression="#[vars.commonData.statusFlag]">
+						<try doc:name="Try" doc:id="532b0cf9-1412-46e8-8410-44f128d6f5cd">
+							<db:insert doc:name="Insert" doc:id="ed2b5728-8899-4a21-ab1d-3b1fe7a0b5d9" config-ref="Database_Config">
+								<db:sql><![CDATA[insert into residentStatusFlag (data,residentId) values (:data,:residentId)]]></db:sql>
+								<db:input-parameters><![CDATA[#[output application/json skipNullOn="everywhere"
+---
+{data :  
+	 write(vars.inputPayload.statusFlag, "application/json")
+	
+	 default "",
+residentId: vars.commonData.rId  
+}]]]></db:input-parameters>
+							</db:insert>
+							  <error-handler ref="error-handlerError_Handler" />
+						</try>
+					</when>
+				</choice>
+			</route>
+			<route >
+				<choice doc:name="Create AIS" doc:id="bce7aff2-6aad-4901-8a4a-329e0ec950be">
+					<when expression="#[vars.commonData.aisIssue]">
+						<try doc:name="Try" doc:id="c03dc83c-9803-4336-8ccd-20a151eb07a6">
+							<db:insert doc:name="Insert" doc:id="e8b42e35-870f-47e2-ae65-bcd6332a2e59" config-ref="Database_Config">
+								<db:sql><![CDATA[insert into residentAisFlag (data,residentId) values (:data,:residentId)]]></db:sql>
+								<db:input-parameters><![CDATA[#[output application/json skipNullOn="everywhere"
+---
+{data : 
+	write(vars.inputPayload.aisIssue, "application/json")
+	 default '',
+residentId: vars.commonData.rId
+}]]]></db:input-parameters>
+							</db:insert>
+							 <error-handler ref="error-handlerError_Handler" />
+						</try>
+					</when>
+				</choice>
+			</route>
+		</scatter-gather>
+		<set-payload value='#[output application/json &#10;---&#10;{&#10;   "id": correlationId,&#10;   "dateTime": now(),&#10;   "status" : " Resident Created Successfully",&#10;   "residentId": vars.commonData.rId&#10;    &#10;}]' doc:name="Set Response" doc:id="c374ab75-388d-48a3-ba92-b91873aa5510" />
+	</sub-flow>
+</mule>
