@@ -28,8 +28,8 @@ types:
       dateOfBirth:
          type: date-only
          example: 2021-09-12
-      age:
-        type: string
+      age?:
+        type: string | nil
         example: "25"
       accountsRef?:
         type: string |nil
@@ -142,7 +142,7 @@ types:
          type: string
          example: "12.08.1995"
       age:
-        type: string|nil
+        type: string | nil
         example: "25"
       accountsRef?:
         type: string|nil

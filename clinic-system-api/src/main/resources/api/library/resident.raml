@@ -17,7 +17,7 @@ types:
         type: string 
         example: "martin"
       age?:
-       type: string
+       type: string|nil
        example: "25"
       home:
         type: string
@@ -55,8 +55,8 @@ types:
       admissionDate:
         type: date-only
         example: 2022-05-20
-      time: 
-        type: time-only
+      time?: 
+        type: time-only | nil
         example: 12:30:00
       roomBed?:
         type: string|nil
@@ -131,6 +131,9 @@ types:
       religion?:
         type: string|nil
         example: "christian"
+      age?:
+       type: string|nil
+       example: "25"
       nationality?: 
         type: string|nil
         example: "american"
@@ -146,8 +149,8 @@ types:
       admissionDate:
         type: date-only
         example: 2022-05-20
-      time: 
-        type: time-only
+      time?: 
+        type: time-only|nil
         example: 12:30:00
       roomBed?:
         type: string|nil

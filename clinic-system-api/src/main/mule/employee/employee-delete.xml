@@ -12,7 +12,7 @@ where employeeId=:employeeId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[output application/json
 ---
 {
-	isActive : 0,
+	isActive : false,
 	employeeId: attributes.uriParams.employeeId
 }]]]></db:input-parameters>
 		</db:update>

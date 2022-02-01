@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+<mule xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="1bc73751-663f-4785-a570-1c7073208e6f" >
+		<email:smtp-connection host="smtp.gmail.com" port="587" user="yogeshsathishlon@gmail.com" password="uxucqoqiajvmkrtj" >
+			<email:properties >
+				<email:property key="mail.smtp.starttls.enable" value="true" />
+			</email:properties>
+		</email:smtp-connection>
+	</email:smtp-config>
 	<sub-flow name="employee-create-sub-flow" doc:id="f1613877-04ab-4395-8fde-0db8e65da1fb" >
 		<set-variable value="#[uuid()]" doc:name="Set Id" doc:id="39ef5164-aff5-4109-a22d-04110d3de422" variableName="uniqueId"/>
 		<set-variable value="#[payload]" doc:name="Set InputPayload" doc:id="a6d599e6-01a4-410c-a392-5629d961557a" variableName="inputPayload"/>
-		<set-variable value="#[output application/json&#10;var Id= randomInt(10000)&#10;var tempData = '1234567890qwertyuiop[asdfghjkl;zxcvbnm,./ZXCVBNM&lt;&gt;?ASDFGHJKL:&quot;QWERTYUIOP{!@#%^&amp;*()_'&#10;//In tempData variable I have stored all of the chars which I wants to allow in password&#10;fun myPassword(len) =&#10;    if(len==1)&#10;        tempData[(sizeOf(tempData) * random())]&#10;    else&#10;        (tempData[(sizeOf(tempData) * random())]) ++ myPassword(len - 1)&#10; &#10;---&#10;{&#10;  //username: payload.firstName ++ &quot;_&quot; ++ Id,&#10;  username: payload.emailId,&#10;  password: myPassword(10)&#10;&#10;}]" doc:name="Set Auto Generate" doc:id="cdb00c8b-8fb7-4b3b-89b0-88f8b49052e7" variableName="loginDetails"/>
+		<set-variable value="#[output application/java&#10;var Id= randomInt(10000)&#10;var tempData = '1234567890qwertyuiop[asdfghjkl;zxcvbnm,./ZXCVBNM&lt;&gt;?ASDFGHJKL:&quot;QWERTYUIOP{!@#%^&amp;*()_'&#10;//In tempData variable I have stored all of the chars which I wants to allow in password&#10;fun myPassword(len) =&#10;    if(len==1)&#10;        tempData[(sizeOf(tempData) * random())]&#10;    else&#10;        (tempData[(sizeOf(tempData) * random())]) ++ myPassword(len - 1)&#10; &#10;---&#10;{&#10;  //username: payload.firstName ++ &quot;_&quot; ++ Id,&#10;  username: payload.emailId,&#10;  password: myPassword(10),&#10;  email: payload.emailId&#10;&#10;}]" doc:name="Set Auto Generate" doc:id="cdb00c8b-8fb7-4b3b-89b0-88f8b49052e7" variableName="loginDetails"/>
 		<db:insert doc:name="Insert Login" doc:id="2281fcc9-a087-4d2d-9a34-8a8518bc232d" config-ref="Database_Config">
 			<db:sql ><![CDATA[insert into login
 (username,password,selectHouse,
@@ -174,6 +182,13 @@ employeeId: vars.commonData.rId
 				</choice>
 			</route>
 		</scatter-gather>
+		<async doc:name="Async" doc:id="be7b2289-677e-4dd6-a5c9-e8a5039819e4" >
+			<parse-template doc:name="Parse Template" doc:id="9c0ffad2-125c-4784-a222-fa263bdcfd72" location="test.html"/>
+		 <email:send doc:name="Send" doc:id="b9c74e52-bf10-4177-b40b-c18e89fe73ac" toAddresses="#[[vars.loginDetails.email]]" subject="Login Details From Clinic  Care System" fromAddress="yogeshsathishlon@gmail.com" config-ref="Email_SMTP">
+				<email:body contentType="text/html">
+				</email:body>
+			</email:send> 
+		</async>
 		<set-payload value='#[output application/json &#10;---&#10;{&#10;   "id": correlationId,&#10;   "dateTime": now(),&#10;   "status" : " Employee Created Successfully",&#10;   "employeeId": vars.commonData.rId&#10;    &#10;}]' doc:name="Set Response" doc:id="c374ab75-388d-48a3-ba92-b91873aa5510" />
 	</sub-flow>
 </mule>

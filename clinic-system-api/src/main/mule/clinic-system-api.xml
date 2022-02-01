@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd">
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:spring="http://www.mulesoft.org/schema/mule/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/spring http://www.mulesoft.org/schema/mule/spring/current/mule-spring.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
     <flow name="clinic-system-api-main">
         <http:listener config-ref="clinic-system-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -13,7 +14,7 @@
         <http:basic-security-filter doc:name="Basic security filter" realm="mule" />
         <spring:authorization-filter doc:name="Authorization filter" doc:id="61a7cdfc-9100-4a2c-9867-9126d14c5eed" requiredAuthorities="ROLE_ADMIN" />
         <apikit:router config-ref="clinic-system-api-config" />
-        <error-handler ref="error-handlerError_Handler" />
+		<error-handler ref="error-handlerError_Handler" />
     </flow>
     <flow name="clinic-system-api-console">
         <http:listener config-ref="clinic-system-api-httpListenerConfig" path="/console/*">
@@ -38,7 +39,7 @@
 		<flow-ref doc:name="employee" doc:id="89d62d09-a4ee-4a0d-bb87-8a7a5d388106" name="employee-update-sub-flow"/>
     </flow>
     <flow name="delete:\resident\(residentId):clinic-system-api-config">
-		<flow-ref doc:name="Delete Resident" doc:id="1d2ff0a2-d454-415c-a143-b1e464e75364" name="employee-deleteSub_Flow"/>
+		<flow-ref doc:name="Delete Resident" doc:id="1d2ff0a2-d454-415c-a143-b1e464e75364" name="resident-deleteSub_Flow"/>
     </flow>
     <flow name="get:\resident:clinic-system-api-config">
 		<flow-ref doc:name="resident-readFullSub_Flow" doc:id="01f0509e-6453-44b6-b9be-dce961007485" name="resident-readFullSub_Flow"/>

@@ -7,12 +7,12 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 	<sub-flow name="resident-deleteSub_Flow" doc:id="ec85de70-17ff-4a12-a2c6-4183738e3baf" >
 		<db:update doc:name="Update Active to inActive" doc:id="5d2e0f5e-333c-4532-af26-4290cf7ba90a" config-ref="Database_Config">
 			<db:sql ><![CDATA[update  residentDetails
-set isActive=:isActive
-where residentId=:residentId]]></db:sql>
+set isActive = :isActive
+where residentId = :residentId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[output application/json
 ---
 {
-	isActive : 0,
+	isActive : false,
 	residentId: attributes.uriParams.residentId
 }]]]></db:input-parameters>
 		</db:update>
