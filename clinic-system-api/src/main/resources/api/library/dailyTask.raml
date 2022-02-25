@@ -1,0 +1,62 @@
+#%RAML 1.0 Library
+types:
+  dailyTaskCreate:
+    type: object
+    properties:
+     residentId:
+      type: string
+      example: "1111"
+     employeeId?:
+       type: string
+       example: "2222"
+     routineId:
+       type: string
+       example: "3333"
+     taskId:
+       type: string
+       example: "4444"
+     specialInstruction?:
+       type: string
+       example: "about update"
+     dailyUpdate?:
+       type: string
+       example: "givenDaily"
+     feedback?:
+       type: string
+       example: "feedback about dailyTask"
+         
+
+  dailyTaskUpdate:
+  
+    type: object
+    properties:
+      id:
+        type: string
+        example: "****"
+      residentId:
+       type: string
+       example: "1111"
+      employeeId?:
+       type: string
+       example: "2222"
+      routineId:
+       type: string
+       example: "3333"
+      taskId:
+       type: string
+       example: "4444"
+      specialInstruction?:
+       type: string
+       example: "about update"
+      dailyUpdate?:
+       type: string
+       example: "givenDaily"       
+      feedBack?:
+        type: string
+        example: "feedback about dailyTask"
+          
+         
+         
+         
+         
+        

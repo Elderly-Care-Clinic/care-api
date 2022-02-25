@@ -13,6 +13,10 @@ uses:
   verify: library/loginVerify.raml
   resident: library/resident.raml
   employee: library/employee.raml
+  task: library/task.raml
+  routineTable: library/routine.raml
+  dailyTasks: library/dailyTask.raml
+
 securitySchemes:
   basic:
     description: |
@@ -162,6 +166,253 @@ securedBy:
           body:
            application/json:
              example: !include example/response/errorResponse.json
+
+/task:
+   post:
+     body:
+       application/json:
+         type: task.taskCreate
+     responses:
+       200:
+         body:
+           application/json:
+             example: !include example/response/taskCreate.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   put:
+     body:
+       application/json:
+         type: task.taskUpdate
+     responses:
+       200:
+         body:
+           application/json:
+             example: !include example/response/taskUpdate.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   get:
+     queryParameters:
+       taskName:
+        type: string
+        example: "assignedTask"
+       
+     responses:
+       200:
+         body:
+           application/json:
+             example: !include example/response/taskRead.json
+       400:
+         body:
+           application/json:
+             example: !include example/response/errorResponse.json
+   /{taskId}:
+     get:
+       responses:
+         200:
+           body:
+             application/json:
+               example: !include example/response/taskSingleRead.json
+         400:
+           body:
+             application/json:
+               example: !include example/response/errorResponse.json
+     delete:
+       responses:
+         200:
+           body:
+             application/json:
+               example: !include example/response/taskDelete.json
+         400:
+           body:
+             application/json:
+               example: !include example/response/errorResponse.json
+/routine:
+  post:
+    body:
+      application/json:
+        type: routineTable.routineCreate
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include example/response/routineCreate.json
+      400:
+        body:
+          application/json:
+            example: !include example/response/errorResponse.json
+  put:
+    body:
+      application/json:
+        type: routineTable.routineUpdate
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include example/response/residentUpdate.json
+      400:
+        body:
+          application/json:
+            example: !include example/response/errorResponse.json
+  get:
+    queryParameters:
+      routineName:
+       type: string
+       example: "morningRoutine"
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include example/response/routineRead.json
+      400:
+        body:
+          application/json:
+            example: !include example/response/errorResponse.json
+  /{routineId}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include example/response/routineSingleRead.json
+        400:
+          body:
+            application/json:
+              example: !include example/response/errorResponse.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include example/response/routineDelete.json
+        400:
+          body:
+            application/json:
+              example: !include example/response/errorResponse.json
+/dailyTask:
+  post:
+    body:
+      application/json:
+        type: dailyTasks.dailyTaskCreate
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include example/response/dailyTaskCreate.json
+      400:
+        body:
+          application/json:
+            example: !include example/response/errorResponse.json
+  put:
+    body:
+      application/json:
+        type: dailyTasks.dailyTaskUpdate
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include example/response/dailyTaskUpdate.json
+      400:
+        body:
+          application/json:
+            example: !include example/response/errorResponse.json
+  get:
+    queryParameters:
+      residentId:
+       type: string
+       example: "1111"
+      employeeId:
+       type: string
+       example: "2222"
+      routineId:
+       type: string
+       example: "3333"
+      taskId:
+       type: string
+       example: "4444"
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include example/response/dailyTaskRead.json
+      400:
+        body:
+          application/json:
+            example: !include example/response/errorResponse.json
+  /{dailyTaskId}:
+    get:
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include example/response/dailyTaskSingleRead.json
+        400:
+          body:
+            application/json:
+              example: !include example/response/errorResponse.json
+    delete:
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include example/response/dailyTaskDelete.json
+        400:
+          body:
+            application/json:
+              example: !include example/response/errorResponse.json
+                
+                
+                
+                
+              
+              
+              
+              
+              
+              
+   
+                
+                
+                
+                
+      
+
+
+              
+              
+              
+              
+              
+              
+
+                 
+           
+                 
+      
+                 
+               
+                 
+
+               
+               
+
+        
+    
+               
+               
+        
+    
+               
+           
+        
+               
+
+              
+        
+      
 
      
    

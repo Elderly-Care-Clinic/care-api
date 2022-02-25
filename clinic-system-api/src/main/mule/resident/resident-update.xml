@@ -8,9 +8,9 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 		<set-variable value='#[output application/json&#10;---&#10;{&#10;	rId: payload.residentId default ""&#10;	&#10;}]' doc:name="Set Id" doc:id="39ef5164-aff5-4109-a22d-04110d3de422" variableName="commonDataId"/>
 		<set-variable value="#[payload]" doc:name="Set InputPayload" doc:id="a6d599e6-01a4-410c-a392-5629d961557a" variableName="inputPayload"/>
 		<db:update doc:name="Resident Update" doc:id="c1372d5d-c9e0-46af-9735-cce4418100ff" config-ref="Database_Config">
-			<db:sql ><![CDATA[ UPDATE residentDetails
-SET	 title=:title, firstname=:firstname, middlename=:middlename, lastname=:lastname, home=:home, gender=:gender, dateOfBirth=:dateOfBirth, maritalStatus=:maritalStatus, NHSNumber=:NHSNumber, placeOfBirth=:placeOfBirth, religion=:religion, nationality=:nationality, ethnicOrigin=:ethnicOrigin, NINumber=:NINumber, notes=:notes, admissionDate=:admissionDate, time=:time, roomBed=:roomBed, height=:height, missingBodyMass=:missingBodyMass, careGroup=:careGroup, residentType=:residentType, residentStatus=:residentStatus, medicalNotes=:medicalNotes, extraInformation=:extraInformation, residentPhoto=:residentPhoto, residentBannerColour=:residentBannerColour   
- WHERE residentId= :residentId
+			<db:sql ><![CDATA[UPDATE residentDetails SET age=:age,title=:title,firstname=:firstname,middlename=:middlename,lastname=:lastname,home=:home,gender=:gender,dateOfBirth=:dateOfBirth,maritalStatus=:maritalStatus,NHSNumber=:NHSNumber,placeOfBirth=:placeOfBirth,religion=:religion,nationality=:nationality,ethnicOrigin=:ethnicOrigin,NINumber=:NINumber,notes=:notes,admissionDate=:admissionDate,time=:time,roomBed=:roomBed,height=:height, missingBodyMass=:missingBodyMass,careGroup=:careGroup,residentType=:residentType,residentStatus=:residentStatus,medicalNotes=:medicalNotes,extraInformation=:extraInformation,residentPhoto=:residentPhoto,residentBannerColour=:residentBannerColour 
+WHERE residentId= :residentId
+ 
 	]]></db:sql>
 			<db:input-parameters ><![CDATA[#[output application/java  skipNullOn="everywhere"
 --- 
@@ -40,8 +40,9 @@ SET	 title=:title, firstname=:firstname, middlename=:middlename, lastname=:lastn
       "medicalNotes"  :  payload.medicalNotes,
       "extraInformation"  :  payload.extraInformation,
       "residentPhoto"  :  payload.residentPhoto,
+      age: payload.age,
       "residentBannerColour"  :  payload.residentBannerColour,
-       "residentId": vars.commonData.rId}]]]></db:input-parameters>
+       "residentId": vars.commonDataId.rId}]]]></db:input-parameters>
 		</db:update>
 		<set-variable value="#[output application/json&#10;---&#10;{&#10;    contact : if(!isEmpty(vars.inputPayload.contactDetails) and (vars.inputPayload.contactDetails != [{}])  )&#10;      true&#10;      else false,&#10;        statusFlag : if(!isEmpty(vars.inputPayload.statusFlag) and (vars.inputPayload.statusFlag != [{}])  )&#10;      true&#10;      else false,&#10;   aisIssue : if(!isEmpty(vars.inputPayload.aisIssue) and (vars.inputPayload.aisIssue != [{}])  )&#10;      true&#10;      else false,&#10;      rId: payload.residentId[0] default []&#10;}]" doc:name="Set condition" doc:id="91a64f35-13da-44a9-b8bb-94e842c555ad" variableName="commonData"/>
 		<scatter-gather doc:name="Scatter-Gather" doc:id="e66d061b-3309-4af0-94c6-1fea18ca38b8" >

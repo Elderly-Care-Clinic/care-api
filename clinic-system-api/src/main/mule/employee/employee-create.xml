@@ -68,9 +68,9 @@ values
 --- 
  {
   "title": vars.inputPayload.title,
-  "firstName": vars.inputPayload.firstName,
-  "middleName": vars.inputPayload.middleName,
-  "lastName": vars.inputPayload.lastName,
+  "firstName": vars.inputPayload.firstname,
+  "middleName": vars.inputPayload.middlename,
+  "lastName": vars.inputPayload.lastname,
   "home": vars.inputPayload.home,
   "gender": vars.inputPayload.gender,
   "dateOfBirth": vars.inputPayload.dateOfBirth,
@@ -88,8 +88,8 @@ values
   "supervisor": vars.inputPayload.supervisor,
   "keyWorker": vars.inputPayload.keyWorker,
   "displayOnRota": vars.inputPayload.displayOnRota,
-  "niNumber": vars.inputPayload.niNumber,
-  "nhsNumber": vars.inputPayload.nhsNumber,
+  "niNumber": vars.inputPayload.NINumber,
+  "nhsNumber": vars.inputPayload.NHSNumber,
   "dbsNumber": vars.inputPayload.dbsNumber,
   "dbsDate": vars.inputPayload.dbsDate,
   "crbCleared": vars.inputPayload.crbCleared,

@@ -22,7 +22,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 			<route >
 				<try doc:name="Try" doc:id="130c7546-29aa-43a4-824c-a62a11ea4406" >
 					<db:select doc:name="Select residentDetails" doc:id="24d71186-b15d-4292-a4e7-0498ced60e44" config-ref="Database_Config">
-					<db:sql><![CDATA[select * from residentDetails where residentId=:residentId and isActive=:isActive]]></db:sql>
+					<db:sql><![CDATA[select * from residentDetails where residentId=:residentId ]]></db:sql>
 					<db:input-parameters><![CDATA[#[output application/json
 ---
 {
@@ -65,6 +65,7 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 			</route>
 		</scatter-gather>
 		<set-payload value='#[output application/json&#10;import * from dw::util::Values&#10;fun dataRewrite(data) = if (isEmpty(data))&#10;data&#10;else read(data,"application/json")&#10;---&#10;if (!isEmpty(payload."1".payload[0]))&#10;(payload."1".payload[0] default {})&#10;&#10;++     (contactDetails :  payload."2".payload default []) if (!isEmpty(payload."2".payload default []))&#10;&#10;++ (statusFlag : flatten(payload."0".payload.data default [] map dataRewrite($)))&#10;if (!isEmpty(payload."0".payload.data default []))&#10;&#10;++ &#10;&#10;(aisIssuesFlag : flatten(payload."3".payload.data default [] map dataRewrite($))) &#10;if (!isEmpty(payload."3".payload.data default [] ))&#10;&#10;else []]' doc:name="Set Payload" doc:id="49df7005-cf9b-49c6-99fe-e50bb59f0816" />
+		<set-payload value='#[output application/json&#10;import * from dw::util::Values&#10;fun dateChange(data)= if(isEmpty(data))&#10;data  else (data as Date)&#10;---&#10;payload update "dateOfBirth" with dateChange($)&#10;update "admissionDate" with dateChange($)]' doc:name="final response" doc:id="8928639c-7dda-4264-835d-3dd70036e100" />
 		<set-variable value="#[if(!isEmpty(payload) and (payload != {}))&#10;200&#10;else 404]" doc:name="Set HttpStatus" doc:id="827bbed1-4306-4047-9c74-ae6b681b871a" variableName="httpStatus"/>
 	</sub-flow>
 	<sub-flow name="resident-readFullSub_Flow" doc:id="2e6d26ef-76a7-4219-b000-e925b58bc828" >
@@ -129,5 +130,6 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 		</scatter-gather>
 		<set-variable value='#[output application/json&#10;fun dataRewrite(data) = if (isEmpty(data))&#10;data&#10;else read(data,"application/json") &#10;---&#10;{status: flatten (payload."2".payload default [] map &#10;	&#10;{&#10;    &#10;    &#10;    residentId: $.residentId,&#10;    &#10;   data: dataRewrite($.data)&#10;   &#10;   &#10;   &#10;   &#10;   }&#10;	&#10;	&#10;	&#10;	&#10;),&#10;&#10;aisIssue:flatten (payload."3".payload default [] map &#10;	{&#10;    &#10;    &#10;    residentId: $.residentId,&#10;    &#10;   data: dataRewrite($.data)&#10;   &#10;   &#10;   &#10;   &#10;   }&#10;	&#10;	&#10;	&#10;	&#10;)&#10;&#10;}]' doc:name="Set Final Status" doc:id="26140d27-1a16-40cd-92a5-98f385e515b5" variableName="statusFlag"/>
 		<set-payload value='#[output application/json&#10;import * from dw::util::Values&#10;fun dataRewrite(data) = if (isEmpty(data))&#10;data&#10;else read(data,"application/json")&#10;fun dataMerge(residentId,inputData) = (inputData) &#10;filter (residentId == $.residentId) &#10;---&#10;payload."0".payload map (($ ++ contactDetails:&#10;dataMerge($.residentId,payload."1".payload default []))&#10;++ (statusFlag:&#10;dataMerge($.residentId,vars.statusFlag.status default [])&#10;)&#10;&#10;++  (aisIssue:&#10;dataMerge($.residentId,vars.statusFlag.aisIssue default [])&#10;)&#10;&#10;)]' doc:name="Set Payload" doc:id="048913f4-b0c7-4723-b741-3af0513ffa37" />
+		<set-payload value='#[output application/json&#10;import * from dw::util::Values&#10;fun dateChange(data)= if(isEmpty(data))&#10;data  else (data as Date)&#10;---&#10;payload default [] map ($ update "dateOfBirth" with dateChange($)&#10;update "admissionDate" with dateChange($)&#10;)]' doc:name="Set Payload" doc:id="1494b06e-ad82-48cf-b15c-7642701019e7" />
 	</sub-flow>
 </mule>

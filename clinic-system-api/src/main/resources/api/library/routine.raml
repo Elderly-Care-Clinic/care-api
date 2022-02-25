@@ -1,0 +1,26 @@
+#%RAML 1.0 Library
+types:
+  routineCreate:
+    type: object
+    properties:
+     routineName:
+       type: string
+       example: "morningRoutine"
+     description:
+       type: string
+       example: "complete morning routine"
+
+  routineUpdate:
+    type: object
+    properties:
+     id:
+        type: number
+        example: 242424 
+     routineName?:
+       type: string
+       example: "morningRoutine"
+     description?:
+       type: string
+       example: "complete morning routine"  
+         
+       
